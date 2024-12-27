@@ -1,5 +1,5 @@
 ﻿import {writable} from 'svelte/store';
-import {IntersectionModel} from "$lib/intersectionModel";
+import {type Direction, IntersectionModel} from "$lib/intersectionModel";
 
 type IntersectionModelStore = {
   model: IntersectionModel;
@@ -19,8 +19,11 @@ const createIntersectionModelStore = () => {
     resetTicks: () => update((store) => {
       store.model.resetTicks();
       return store;
-    })
-  };
+    }),
+    addCar: (direction: Direction) => update((store) => {
+      store.model.addCar(direction);
+      return store;
+    })  };
 }
 
 export const intersectionModelStore = createIntersectionModelStore();

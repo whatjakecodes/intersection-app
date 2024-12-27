@@ -7,8 +7,8 @@ test("intersection model can be created", () => {
   expect(subject.tick).toEqual(0);
   
   expect(subject.northRoad.leftLane.cars).toHaveLength(0);
-  expect(subject.northRoad.middleOutgoingLane.cars).toHaveLength(0);
-  expect(subject.northRoad.middleIncomingLane.cars).toHaveLength(0);
+  expect(subject.northRoad.outgoingLane.cars).toHaveLength(0);
+  expect(subject.northRoad.incomingLane.cars).toHaveLength(0);
   expect(subject.northRoad.rightLane.cars).toHaveLength(0);
 
   expect(subject.northRoad.leftTrafficLight).toEqual('red');
@@ -16,8 +16,8 @@ test("intersection model can be created", () => {
   expect(subject.northRoad.rightTrafficLight).toEqual('red');
 
   expect(subject.southRoad.leftLane.cars).toHaveLength(0);
-  expect(subject.southRoad.middleOutgoingLane.cars).toHaveLength(0);
-  expect(subject.southRoad.middleIncomingLane.cars).toHaveLength(0);
+  expect(subject.southRoad.outgoingLane.cars).toHaveLength(0);
+  expect(subject.southRoad.incomingLane.cars).toHaveLength(0);
   expect(subject.southRoad.rightLane.cars).toHaveLength(0);
 
   expect(subject.southRoad.leftTrafficLight).toEqual('red');
@@ -25,8 +25,8 @@ test("intersection model can be created", () => {
   expect(subject.southRoad.rightTrafficLight).toEqual('red');
 
   expect(subject.eastRoad.leftLane.cars).toHaveLength(0);
-  expect(subject.eastRoad.middleOutgoingLane.cars).toHaveLength(0);
-  expect(subject.eastRoad.middleIncomingLane.cars).toHaveLength(0);
+  expect(subject.eastRoad.outgoingLane.cars).toHaveLength(0);
+  expect(subject.eastRoad.incomingLane.cars).toHaveLength(0);
   expect(subject.eastRoad.rightLane.cars).toHaveLength(0);
 
   expect(subject.eastRoad.leftTrafficLight).toEqual('red');
@@ -34,8 +34,8 @@ test("intersection model can be created", () => {
   expect(subject.eastRoad.rightTrafficLight).toEqual('red');
 
   expect(subject.westRoad.leftLane.cars).toHaveLength(0);
-  expect(subject.westRoad.middleOutgoingLane.cars).toHaveLength(0);
-  expect(subject.westRoad.middleIncomingLane.cars).toHaveLength(0);
+  expect(subject.westRoad.outgoingLane.cars).toHaveLength(0);
+  expect(subject.westRoad.incomingLane.cars).toHaveLength(0);
   expect(subject.westRoad.rightLane.cars).toHaveLength(0);
 
   expect(subject.westRoad.leftTrafficLight).toEqual('red');
@@ -61,6 +61,30 @@ test("intersection straight lanes alternate every 30 ticks", () => {
   subject.updateTicks(28);
 
   expectNorthSouthGreen(subject);
+});
+
+test("intersection allows cars through from north to south", () => {
+  const subject = new IntersectionModel();
+
+  subject.northRoad.outgoingLane.cars = 2
+  
+  expect(subject.northRoad.outgoingLane.cars).toEqual(2);
+  expect(subject.southRoad.incomingLane.cars).toEqual(0);
+  
+  subject.updateTicks(1);
+
+  expect(subject.northRoad.outgoingLane.cars).toEqual(1);
+  expect(subject.southRoad.incomingLane.cars).toEqual(1);
+  
+  subject.updateTicks(1);
+
+  expect(subject.northRoad.outgoingLane.cars).toEqual(0);
+  expect(subject.southRoad.incomingLane.cars).toEqual(1);
+  
+  subject.updateTicks(1);
+
+  expect(subject.northRoad.outgoingLane.cars).toEqual(0);
+  expect(subject.southRoad.incomingLane.cars).toEqual(0);
 });
 
 

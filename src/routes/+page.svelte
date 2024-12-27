@@ -1,6 +1,7 @@
-<script>
+<script lang="ts">
     import Road from "$lib/components/Road.svelte";
     import {intersectionModelStore} from '$lib/stores/intersectionModelStore';
+    import type {Direction} from "$lib/intersectionModel.js";
 
     function handleClick() {
         intersectionModelStore.updateTicks(1);
@@ -18,6 +19,9 @@
         intersectionModelStore.updateTicks(1);
     }, 1000);
 
+    function handleAddCar(direction: Direction) {
+        intersectionModelStore.addCar(direction);
+    }
 </script>
 
 <h1>Intersection Model</h1>
@@ -42,6 +46,36 @@
             onclick={handleResetClick}
     >
         Reset
+    </button>
+</div>
+<div>
+
+    <button
+            class="px-4 py-2 bg-blue-500 text-white rounded"
+            onclick={() => handleAddCar('north')}
+    >
+        Add Southbound Car
+    </button>
+
+    <button
+            class="px-4 py-2 bg-blue-500 text-white rounded"
+            onclick={() => handleAddCar('south')}
+    >
+        Add Northbound Car
+    </button>
+
+    <button
+            class="px-4 py-2 bg-blue-500 text-white rounded"
+            onclick={() => handleAddCar('west')}
+    >
+        Add Eastbound Car
+    </button>
+
+    <button
+            class="px-4 py-2 bg-blue-500 text-white rounded"
+            onclick={() => handleAddCar('east')}
+    >
+        Add Westbound Car
     </button>
 </div>
 <p>
