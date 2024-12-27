@@ -38,6 +38,16 @@
 <div class="absolute flex {directionClasses[direction]} gap-2">
 
     <div class="flex {laneOrientation[direction]}">
+        <div class="w-8 h-8 rounded-full bg-transparent"></div>
+        <div>
+            <div class="w-16 h-8 bg-gray-400">{roadState.incomingLane.cars} cars</div>
+            <div class="w-16 h-8 bg-gray-400">Mi</div>
+        </div>
+        <TrafficLight state={'gray'}/>
+    </div>
+
+
+    <div class="flex {laneOrientation[direction]}">
         <button onclick={() => handleAddCar(roadState.leftLane)}
                 class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center">
             +
@@ -62,14 +72,6 @@
             <TrafficLight state={roadState.middleTrafficLight}/>
         </div>
 
-        <div class="flex {laneOrientation[direction]}">
-            <div class="w-8 h-8 rounded-full bg-transparent"></div>
-            <div>
-                <div class="w-16 h-8 bg-gray-400">{roadState.incomingLane.cars} cars</div>
-                <div class="w-16 h-8 bg-gray-400">Mi</div>
-            </div>
-            <TrafficLight state={'gray'}/>
-        </div>
     </div>
     <div class="flex {laneOrientation[direction]}">
         <button onclick={() => handleAddCar(roadState.rightLane)}
