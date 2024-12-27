@@ -2,11 +2,13 @@
 }
 
 export interface Lane {
+  laneType: LaneType;
   cars: number;
 }
 
 export type TrafficLightState = 'red' | 'green' | 'yellow' | 'orange' | 'gray';
 export type Direction = 'north' | 'south' | 'east' | 'west';
+export type LaneType = 'left' | 'middle' | 'right';
 
 export interface Road {
   middleTrafficLight: TrafficLightState;
@@ -25,10 +27,10 @@ function createDefaultRoad(): Road {
     middleTrafficLight: "red",
     rightTrafficLight: "red",
 
-    leftLane: {cars: 0},
-    incomingLane: {cars: 0},
-    outgoingLane: {cars: 0},
-    rightLane: {cars: 0}
+    leftLane: {cars: 0, laneType: 'left'},
+    incomingLane: {cars: 0, laneType: 'middle'},
+    outgoingLane: {cars: 0, laneType: 'middle'},
+    rightLane: {cars: 0, laneType: 'right'}
   };
 }
 
@@ -48,6 +50,11 @@ export class IntersectionModel {
 
   resetTicks() {
     this.tick = 0;
+    
+    resetCars(this.northRoad);
+    resetCars(this.eastRoad);
+    resetCars(this.southRoad);
+    resetCars(this.westRoad);
     this.refreshState();
   }
 
@@ -56,42 +63,57 @@ export class IntersectionModel {
     this.refreshState();
   }
 
-  updateCars() {
-
-  }
-
   private refreshState() {
     if (this.tick == 0) {
       this.northRoad.middleTrafficLight = "red";
+      this.northRoad.leftTrafficLight = "red";
       this.southRoad.middleTrafficLight = "red";
+      this.southRoad.leftTrafficLight = "red";
       this.westRoad.middleTrafficLight = "red";
+      this.westRoad.leftTrafficLight = "red";
       this.eastRoad.middleTrafficLight = "red";
+      this.eastRoad.leftTrafficLight = "red";
       return;
     }
+
+    const range = Math.floor(this.tick / 30);
+    if (range % 2 === 0) {
+      this.northRoad.middleTrafficLight = "green";
+      this.northRoad.leftTrafficLight = "green";
+      this.southRoad.middleTrafficLight = "green";
+      this.southRoad.leftTrafficLight = "green";
+      this.westRoad.middleTrafficLight = "red";
+      this.westRoad.leftTrafficLight = "red";
+      this.eastRoad.middleTrafficLight = "red";
+      this.eastRoad.leftTrafficLight = "red";
+    } else {
+      this.northRoad.middleTrafficLight = "red";
+      this.northRoad.leftTrafficLight = "red";
+      this.southRoad.middleTrafficLight = "red";
+      this.southRoad.leftTrafficLight = "red";
+      this.westRoad.middleTrafficLight = "green";
+      this.westRoad.leftTrafficLight = "green";
+      this.eastRoad.middleTrafficLight = "green";
+      this.eastRoad.leftTrafficLight = "green";
+    }
+
+
     this.moveIncomingLane(this.northRoad);
     this.moveIncomingLane(this.southRoad);
     this.moveIncomingLane(this.eastRoad);
     this.moveIncomingLane(this.westRoad);
 
     this.moveFromLane(this.northRoad, this.southRoad);
+    this.moveFromLeftLane(this.northRoad, this.eastRoad);
+
     this.moveFromLane(this.southRoad, this.northRoad);
-    
+    this.moveFromLeftLane(this.southRoad, this.westRoad);
+
     this.moveFromLane(this.eastRoad, this.westRoad);
+    this.moveFromLeftLane(this.eastRoad, this.southRoad);
+    
     this.moveFromLane(this.westRoad, this.eastRoad);
-
-
-    const range = Math.floor(this.tick / 30);
-    if (range % 2 === 0) {
-      this.northRoad.middleTrafficLight = "green";
-      this.southRoad.middleTrafficLight = "green";
-      this.westRoad.middleTrafficLight = "red";
-      this.eastRoad.middleTrafficLight = "red";
-    } else {
-      this.northRoad.middleTrafficLight = "red";
-      this.southRoad.middleTrafficLight = "red";
-      this.westRoad.middleTrafficLight = "green";
-      this.eastRoad.middleTrafficLight = "green";
-    }
+    this.moveFromLeftLane(this.westRoad, this.northRoad);
   }
 
   moveIncomingLane(road: Road) {
@@ -101,10 +123,10 @@ export class IntersectionModel {
   }
 
   private moveFromLane(outgoingRoad: Road, incomingRoad: Road) {
-    if (!['green', 'yellow'].includes(outgoingRoad.middleTrafficLight)){
+    if (!['green', 'yellow'].includes(outgoingRoad.middleTrafficLight)) {
       return;
     }
-    
+
     let outCount = outgoingRoad.outgoingLane.cars;
     let inCount = incomingRoad.incomingLane.cars;
     if (outCount > 0) {
@@ -113,21 +135,57 @@ export class IntersectionModel {
     }
   }
 
-  addCar(direction: Direction) {
-    switch (direction) {
-      case "north":
-        this.northRoad.outgoingLane.cars++;
-        break;
-      case "south":
-        this.southRoad.outgoingLane.cars++;
-        break;
-      case "east":
-        this.eastRoad.outgoingLane.cars++;
-        break;
-      case "west":
-        this.westRoad.outgoingLane.cars++;
-        break;
+  private moveFromLeftLane(outgoingRoad: Road, incomingRoad: Road) {
+    if (!['green', 'yellow'].includes(outgoingRoad.leftTrafficLight)) {
+      return;
+    }
 
+    let outCount = outgoingRoad.leftLane.cars;
+    let inCount = incomingRoad.incomingLane.cars;
+    if (outCount > 0) {
+      outgoingRoad.leftLane.cars = outCount - 1
+      incomingRoad.incomingLane.cars = inCount + 1;
     }
   }
+
+  addCar(direction: Direction, lane: Lane) {
+
+    let road = this.northRoad;
+    switch (direction) {
+      case "north":
+        road = this.northRoad;
+        break;
+      case "south":
+        road = this.southRoad;
+        break;
+      case "east":
+        road = this.eastRoad;
+        break;
+      case "west":
+        road = this.westRoad;
+        break;
+    }
+
+    let laneToUpdate = road.outgoingLane;
+    switch (lane.laneType) {
+      case "left":
+        laneToUpdate = road.leftLane;
+        break;
+      case "middle":
+        laneToUpdate = road.outgoingLane;
+        break;
+      case "right":
+        laneToUpdate = road.rightLane;
+        break;
+    }
+
+    laneToUpdate.cars++;
+  }
+}
+
+function resetCars(road: Road) {
+  road.leftLane.cars = 0;
+  road.rightLane.cars = 0;
+  road.outgoingLane.cars = 0;
+  road.incomingLane.cars = 0;
 }
