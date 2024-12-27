@@ -42,23 +42,32 @@
                 class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center">
             +
         </button>
-        <div class="w-16 h-16 bg-gray-400">{roadState.leftLane.cars} cars</div>
+        <div>
+            <div class="w-16 h-8 bg-gray-400">{roadState.leftLane.cars} cars</div>
+            <div class="w-16 h-8 bg-gray-400">L</div>
+        </div>
         <TrafficLight state={roadState.leftTrafficLight}/>
     </div>
-    
+
     <div class="flex gap-1 {middleLaneOrientation[direction]}">
         <div class="flex {laneOrientation[direction]}">
             <button onclick={() => handleAddCar(roadState.outgoingLane)}
                     class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center">
                 +
             </button>
-            <div class="w-16 h-16 bg-gray-400">{roadState.outgoingLane.cars} cars</div>
+            <div>
+                <div class="w-16 h-8 bg-gray-400">{roadState.outgoingLane.cars} cars</div>
+                <div class="w-16 h-8 bg-gray-400">Mo</div>
+            </div>
             <TrafficLight state={roadState.middleTrafficLight}/>
         </div>
 
         <div class="flex {laneOrientation[direction]}">
             <div class="w-8 h-8 rounded-full bg-transparent"></div>
-            <div class="w-16 h-16 bg-gray-400">{roadState.incomingLane.cars} cars</div>
+            <div>
+                <div class="w-16 h-8 bg-gray-400">{roadState.incomingLane.cars} cars</div>
+                <div class="w-16 h-8 bg-gray-400">Mi</div>
+            </div>
             <TrafficLight state={'gray'}/>
         </div>
     </div>
@@ -67,7 +76,10 @@
                 class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center">
             +
         </button>
-        <div class="w-16 h-16 bg-gray-400">{roadState.rightLane.cars} cars</div>
+        <div>
+            <div class="w-16 h-8 bg-gray-400">{roadState.rightLane.cars} cars</div>
+            <div class="w-16 h-8 bg-gray-400">R</div>
+        </div>
         <TrafficLight state={roadState.rightTrafficLight}/>
     </div>
 
