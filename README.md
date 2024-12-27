@@ -21,6 +21,10 @@ Add cars to each lane by clicking the Plus button by that lane.
 * Mo = Middle Outgoing Lane
 * Mi = Middle Incoming Lane
 
+### Unit tests
+
+Only the IntersectionModel is currently tested:
+`npm run test`
 
 ## Developing
 
