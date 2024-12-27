@@ -5,6 +5,7 @@
     function handleClick() {
         intersectionModelStore.updateTicks(1);
     }
+
     function handle30Click() {
         intersectionModelStore.updateTicks(30);
     }
@@ -12,6 +13,10 @@
     function handleResetClick() {
         intersectionModelStore.resetTicks();
     }
+    
+    setInterval(() => {
+        intersectionModelStore.updateTicks(1);
+    }, 1000);
 
 </script>
 
