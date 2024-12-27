@@ -16,10 +16,10 @@ Ticks increase by 1 per second by default. Traffic Lights update accordingly:
 Add cars to each lane by clicking the Plus button by that lane.
 
 ### Each Road's lanes are labeled according:
-R = Right Turn Lane
-L = Left Turn Lane
-Mo = Middle Outgoing Lane
-Mi = Middle Incoming Lane
+* R = Right Turn Lane
+* L = Left Turn Lane
+* Mo = Middle Outgoing Lane
+* Mi = Middle Incoming Lane
 
 
 ## Developing
