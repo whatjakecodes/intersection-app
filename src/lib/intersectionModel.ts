@@ -9,14 +9,13 @@ type TrafficLightState = 'red' | 'green' | 'yellow';
 type LeftTrafficLightState = TrafficLightState | 'orange';
 
 interface Road {
-  midLeftTrafficLight: TrafficLightState;
-  midRightTrafficLight: TrafficLightState;
+  middleTrafficLight: TrafficLightState;
   leftTrafficLight: LeftTrafficLightState;
   rightTrafficLight: TrafficLightState;
 
   rightLane: Lane;
-  midRightLane: Lane;
-  midLeftLane: Lane;
+  middleIncomingLane: Lane;
+  middleOutgoingLane: Lane;
   leftLane: Lane;
 }
 
@@ -29,14 +28,13 @@ export class IntersectionModel {
   constructor() {
 
     const defaultRoad: Road = {
-      leftTrafficLight: "orange",
-      midLeftTrafficLight: "green",
-      midRightTrafficLight: "green",
+      leftTrafficLight: "red",
+      middleTrafficLight: "red",
       rightTrafficLight: "red",
 
       leftLane: {cars: []},
-      midRightLane: {cars: []},
-      midLeftLane: {cars: []},
+      middleIncomingLane: {cars: []},
+      middleOutgoingLane: {cars: []},
       rightLane: {cars: []}
     };
 
