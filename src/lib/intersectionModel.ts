@@ -50,7 +50,7 @@ export class IntersectionModel {
 
   resetTicks() {
     this.tick = 0;
-    
+
     resetCars(this.northRoad);
     resetCars(this.eastRoad);
     resetCars(this.southRoad);
@@ -76,25 +76,30 @@ export class IntersectionModel {
       return;
     }
 
-    const range = Math.floor(this.tick / 30);
-    if (range % 2 === 0) {
-      this.northRoad.middleTrafficLight = "green";
-      this.northRoad.leftTrafficLight = "green";
-      this.southRoad.middleTrafficLight = "green";
-      this.southRoad.leftTrafficLight = "green";
+    const range = Math.floor(this.tick / 31);
+    const tickInCycle = this.tick % 31;
+    const isYellowPhase = tickInCycle >= 28;
+    const isNorthSouthTurn = range % 2 === 0;
+    if (isNorthSouthTurn) {
+      const northSouthColor = isYellowPhase ? "yellow" : "green";
+      this.northRoad.middleTrafficLight = northSouthColor;
+      this.northRoad.leftTrafficLight = northSouthColor;
+      this.southRoad.middleTrafficLight = northSouthColor;
+      this.southRoad.leftTrafficLight = northSouthColor;
       this.westRoad.middleTrafficLight = "red";
       this.westRoad.leftTrafficLight = "red";
       this.eastRoad.middleTrafficLight = "red";
       this.eastRoad.leftTrafficLight = "red";
     } else {
+      const eastWestColor = isYellowPhase ? "yellow" : "green";
       this.northRoad.middleTrafficLight = "red";
       this.northRoad.leftTrafficLight = "red";
       this.southRoad.middleTrafficLight = "red";
       this.southRoad.leftTrafficLight = "red";
-      this.westRoad.middleTrafficLight = "green";
-      this.westRoad.leftTrafficLight = "green";
-      this.eastRoad.middleTrafficLight = "green";
-      this.eastRoad.leftTrafficLight = "green";
+      this.westRoad.middleTrafficLight = eastWestColor;
+      this.westRoad.leftTrafficLight = eastWestColor;
+      this.eastRoad.middleTrafficLight = eastWestColor;
+      this.eastRoad.leftTrafficLight = eastWestColor;
     }
 
 
@@ -111,7 +116,7 @@ export class IntersectionModel {
 
     this.moveFromLane(this.eastRoad, this.westRoad);
     this.moveFromLeftLane(this.eastRoad, this.southRoad);
-    
+
     this.moveFromLane(this.westRoad, this.eastRoad);
     this.moveFromLeftLane(this.westRoad, this.northRoad);
   }
