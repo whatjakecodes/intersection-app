@@ -1,5 +1,25 @@
 # Intersection
 
+## About
+
+Simulate traffic through an intersection
+
+### Timer Ticks
+Ticks increase by 1 per second by default. Traffic Lights update accordingly:
+
+1. Seconds 0-40 allow North/South Traffic
+2. Seconds 41-80 allow East/West Traffic
+3. N/S left turn lanes enable from 31-40s
+4. E/W left turn lanes enable from 71-80s
+5. All lanes get 3 ticks of yellow light before a red light
+
+Add cars to each lane by clicking the Plus button by that lane.
+
+### Each Road's lanes are labeled according:
+R = Right Turn Lane
+L = Left Turn Lane
+Mo = Middle Outgoing Lane
+Mi = Middle Incoming Lane
 
 
 ## Developing
