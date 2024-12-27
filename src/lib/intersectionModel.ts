@@ -121,7 +121,7 @@ export class IntersectionModel {
       this.southRoad.middleTrafficLight = "red";
       this.southRoad.rightTrafficLight = "red";
       this.southRoad.leftTrafficLight = "red";
-      
+
       if (isLeftTurnPhase) {
         const isYellowPhase = tickInCycle >= 38;
         const eastWestColor = isYellowPhase ? "yellow" : "green";
@@ -154,15 +154,19 @@ export class IntersectionModel {
 
     this.moveFromLane(this.northRoad, this.southRoad);
     this.moveFromRightLane(this.northRoad, this.westRoad);
+    this.moveFromLeftLane(this.northRoad, this.eastRoad);
 
     this.moveFromLane(this.southRoad, this.northRoad);
     this.moveFromRightLane(this.southRoad, this.eastRoad);
+    this.moveFromLeftLane(this.southRoad, this.westRoad);
 
     this.moveFromLane(this.eastRoad, this.westRoad);
     this.moveFromRightLane(this.eastRoad, this.northRoad);
+    this.moveFromLeftLane(this.eastRoad, this.southRoad);
 
     this.moveFromLane(this.westRoad, this.eastRoad);
     this.moveFromRightLane(this.westRoad, this.southRoad);
+    this.moveFromLeftLane(this.westRoad, this.northRoad);
   }
 
   moveIncomingLane(road: Road) {
@@ -193,6 +197,19 @@ export class IntersectionModel {
     let inCount = incomingRoad.incomingLane.cars;
     if (outCount > 0) {
       outgoingRoad.rightLane.cars = outCount - 1
+      incomingRoad.incomingLane.cars = inCount + 1;
+    }
+  }
+
+  private moveFromLeftLane(outgoingRoad: Road, incomingRoad: Road) {
+    if (!['green', 'yellow'].includes(outgoingRoad.leftTrafficLight)) {
+      return;
+    }
+
+    let outCount = outgoingRoad.leftLane.cars;
+    let inCount = incomingRoad.incomingLane.cars;
+    if (outCount > 0) {
+      outgoingRoad.leftLane.cars = outCount - 1
       incomingRoad.incomingLane.cars = inCount + 1;
     }
   }
