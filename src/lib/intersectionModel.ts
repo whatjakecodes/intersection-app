@@ -1,16 +1,15 @@
-﻿interface Car {
+﻿export interface Car {
 }
 
-interface Lane {
+export interface Lane {
   cars: Car[];
 }
 
-type TrafficLightState = 'red' | 'green' | 'yellow';
-type LeftTrafficLightState = TrafficLightState | 'orange';
+export type TrafficLightState = 'red' | 'green' | 'yellow' | 'orange' | 'gray';
 
-interface Road {
+export interface Road {
   middleTrafficLight: TrafficLightState;
-  leftTrafficLight: LeftTrafficLightState;
+  leftTrafficLight: TrafficLightState;
   rightTrafficLight: TrafficLightState;
 
   rightLane: Lane;
@@ -44,9 +43,24 @@ export class IntersectionModel {
     this.eastRoad = {...defaultRoad};
     this.westRoad = {...defaultRoad};
   }
+  resetTicks() {
+    this.tick = 0;
+    this.refreshState();
+  }
 
   updateTicks(tickCount: number) {
     this.tick += tickCount;
+    this.refreshState();
+  }
+
+  private refreshState() {
+    if (this.tick == 0) {
+      this.northRoad.middleTrafficLight = "red";
+      this.southRoad.middleTrafficLight = "red";
+      this.westRoad.middleTrafficLight = "red";
+      this.eastRoad.middleTrafficLight = "red";
+      return;
+    }
     
     const range = Math.floor(this.tick / 30);
     if (range % 2 === 0) {
@@ -60,6 +74,5 @@ export class IntersectionModel {
       this.westRoad.middleTrafficLight = "green";
       this.eastRoad.middleTrafficLight = "green";
     }
-    
   }
 }

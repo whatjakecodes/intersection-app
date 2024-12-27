@@ -4,6 +4,8 @@ import {IntersectionModel} from "$lib/intersectionModel";
 test("intersection model can be created", () => {
   const subject = new IntersectionModel();
 
+  expect(subject.tick).toEqual(0);
+  
   expect(subject.northRoad.leftLane.cars).toHaveLength(0);
   expect(subject.northRoad.middleOutgoingLane.cars).toHaveLength(0);
   expect(subject.northRoad.middleIncomingLane.cars).toHaveLength(0);
