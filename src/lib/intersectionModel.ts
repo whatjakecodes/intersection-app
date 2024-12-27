@@ -24,6 +24,7 @@ export class IntersectionModel {
   southRoad: Road;
   eastRoad: Road;
   westRoad: Road;
+  tick: number = 0;
 
   constructor() {
 
@@ -42,5 +43,23 @@ export class IntersectionModel {
     this.southRoad = {...defaultRoad};
     this.eastRoad = {...defaultRoad};
     this.westRoad = {...defaultRoad};
+  }
+
+  updateTicks(tickCount: number) {
+    this.tick += tickCount;
+    
+    const range = Math.floor(this.tick / 30);
+    if (range % 2 === 0) {
+      this.northRoad.middleTrafficLight = "green";
+      this.southRoad.middleTrafficLight = "green";
+      this.westRoad.middleTrafficLight = "red";
+      this.eastRoad.middleTrafficLight = "red";
+    } else {
+      this.northRoad.middleTrafficLight = "red";
+      this.southRoad.middleTrafficLight = "red";
+      this.westRoad.middleTrafficLight = "green";
+      this.eastRoad.middleTrafficLight = "green";
+    }
+    
   }
 }
