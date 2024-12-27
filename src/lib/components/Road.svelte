@@ -11,9 +11,9 @@
   let {direction, roadState}: RoadProps = $props();
 
   const directionClasses = {
-    north: "bottom-full left-1/2 -translate-x-1/2 ",
+    north: "bottom-full left-1/2 -translate-x-1/2 flex-row-reverse",
     south: "top-full left-1/2 -translate-x-1/2 ",
-    east: "left-full top-1/2 -translate-y-1/2 flex-col",
+    east: "left-full top-1/2 -translate-y-1/2 flex-col-reverse",
     west: "right-full top-1/2 -translate-y-1/2 flex-col"
   };
   const laneOrientation = {
@@ -29,22 +29,23 @@
     west: "flex-col-reverse"
   }
 
-    function handleAddCar(lane: Lane) {
-      intersectionModelStore.addCar(direction, lane)
-    }
-  
+  function handleAddCar(lane: Lane) {
+    intersectionModelStore.addCar(direction, lane)
+  }
+
 </script>
 
 <div class="absolute flex {directionClasses[direction]} gap-2">
+
     <div class="flex {laneOrientation[direction]}">
-        <button onclick={() => handleAddCar(roadState.rightLane)}
+        <button onclick={() => handleAddCar(roadState.leftLane)}
                 class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center">
             +
         </button>
-        <div class="w-16 h-16 bg-gray-400">{roadState.rightLane.cars} cars</div>
-        <TrafficLight state={roadState.rightTrafficLight}/>
+        <div class="w-16 h-16 bg-gray-400">{roadState.leftLane.cars} cars</div>
+        <TrafficLight state={roadState.leftTrafficLight}/>
     </div>
-
+    
     <div class="flex gap-1 {middleLaneOrientation[direction]}">
         <div class="flex {laneOrientation[direction]}">
             <button onclick={() => handleAddCar(roadState.outgoingLane)}
@@ -61,14 +62,13 @@
             <TrafficLight state={'gray'}/>
         </div>
     </div>
-
     <div class="flex {laneOrientation[direction]}">
-        <button onclick={() => handleAddCar(roadState.leftLane)}
+        <button onclick={() => handleAddCar(roadState.rightLane)}
                 class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center">
             +
         </button>
-        <div class="w-16 h-16 bg-gray-400">{roadState.leftLane.cars} cars</div>
-        <TrafficLight state={roadState.leftTrafficLight}/>
+        <div class="w-16 h-16 bg-gray-400">{roadState.rightLane.cars} cars</div>
+        <TrafficLight state={roadState.rightTrafficLight}/>
     </div>
 
 </div>
