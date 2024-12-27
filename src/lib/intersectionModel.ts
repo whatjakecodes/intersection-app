@@ -67,39 +67,83 @@ export class IntersectionModel {
     if (this.tick == 0) {
       this.northRoad.middleTrafficLight = "red";
       this.northRoad.leftTrafficLight = "red";
+      this.northRoad.rightTrafficLight = "red";
       this.southRoad.middleTrafficLight = "red";
       this.southRoad.leftTrafficLight = "red";
+      this.southRoad.rightTrafficLight = "red";
       this.westRoad.middleTrafficLight = "red";
       this.westRoad.leftTrafficLight = "red";
+      this.westRoad.rightTrafficLight = "red";
       this.eastRoad.middleTrafficLight = "red";
       this.eastRoad.leftTrafficLight = "red";
+      this.eastRoad.rightTrafficLight = "red";
       return;
     }
 
-    const range = Math.floor(this.tick / 31);
-    const tickInCycle = this.tick % 31;
-    const isYellowPhase = tickInCycle >= 28;
+    const range = Math.floor(this.tick / 40);
+    const tickInCycle = this.tick % 40;
+    const isLeftTurnPhase = tickInCycle >= 31 && tickInCycle <= 38;
     const isNorthSouthTurn = range % 2 === 0;
     if (isNorthSouthTurn) {
-      const northSouthColor = isYellowPhase ? "yellow" : "green";
-      this.northRoad.middleTrafficLight = northSouthColor;
-      this.northRoad.rightTrafficLight = northSouthColor;
-      this.southRoad.middleTrafficLight = northSouthColor;
-      this.southRoad.rightTrafficLight = northSouthColor;
+      if (isLeftTurnPhase) {
+        const isYellowPhase = tickInCycle >= 38;
+        const northSouthColor = isYellowPhase ? "yellow" : "green";
+        this.northRoad.middleTrafficLight = 'red';
+        this.northRoad.rightTrafficLight = 'red';
+        this.southRoad.middleTrafficLight = 'red';
+        this.southRoad.rightTrafficLight = 'red';
+
+        this.northRoad.leftTrafficLight = northSouthColor;
+        this.southRoad.leftTrafficLight = northSouthColor;
+      } else {
+        const isYellowPhase = tickInCycle >= 28;
+        const northSouthColor = isYellowPhase ? "yellow" : "green";
+        this.northRoad.middleTrafficLight = northSouthColor;
+        this.northRoad.rightTrafficLight = northSouthColor;
+        this.southRoad.middleTrafficLight = northSouthColor;
+        this.southRoad.rightTrafficLight = northSouthColor;
+
+        this.northRoad.leftTrafficLight = 'red';
+        this.southRoad.leftTrafficLight = 'red';
+      }
+
       this.westRoad.middleTrafficLight = "red";
       this.westRoad.rightTrafficLight = "red";
+      this.westRoad.leftTrafficLight = 'red';
       this.eastRoad.middleTrafficLight = "red";
       this.eastRoad.rightTrafficLight = "red";
+      this.eastRoad.leftTrafficLight = 'red';
     } else {
-      const eastWestColor = isYellowPhase ? "yellow" : "green";
+      // east/west turn
       this.northRoad.middleTrafficLight = "red";
       this.northRoad.rightTrafficLight = "red";
+      this.northRoad.leftTrafficLight = "red";
       this.southRoad.middleTrafficLight = "red";
       this.southRoad.rightTrafficLight = "red";
-      this.westRoad.middleTrafficLight = eastWestColor;
-      this.westRoad.rightTrafficLight = eastWestColor;
-      this.eastRoad.middleTrafficLight = eastWestColor;
-      this.eastRoad.rightTrafficLight = eastWestColor;
+      this.southRoad.leftTrafficLight = "red";
+      
+      if (isLeftTurnPhase) {
+        const isYellowPhase = tickInCycle >= 38;
+        const eastWestColor = isYellowPhase ? "yellow" : "green";
+        this.eastRoad.middleTrafficLight = 'red';
+        this.eastRoad.rightTrafficLight = 'red';
+        this.westRoad.middleTrafficLight = 'red';
+        this.westRoad.rightTrafficLight = 'red';
+
+        this.eastRoad.leftTrafficLight = eastWestColor;
+        this.westRoad.leftTrafficLight = eastWestColor;
+      } else {
+        const isYellowPhase = tickInCycle >= 28;
+        const eastWestColor = isYellowPhase ? "yellow" : "green";
+        this.eastRoad.middleTrafficLight = eastWestColor;
+        this.eastRoad.rightTrafficLight = eastWestColor;
+        this.westRoad.middleTrafficLight = eastWestColor;
+        this.westRoad.rightTrafficLight = eastWestColor;
+
+        this.eastRoad.leftTrafficLight = 'red';
+        this.westRoad.leftTrafficLight = 'red';
+      }
+
     }
 
 

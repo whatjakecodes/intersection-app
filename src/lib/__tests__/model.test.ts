@@ -71,34 +71,97 @@ test("intersection straight lanes alternate every 30 ticks", () => {
   expectNorthSouth(subject, "green");
 });
 
-test("intersection right turn lanes alternate every 30 ticks", () => {
+
+test("intersection left/right turn lanes alternate every 30 ticks", () => {
+  const subject = new IntersectionModel();
+
+  // 0 - 27 green
+  subject.updateTicks(1);
+  expectNorthSouthRight(subject, 'green');
+  expectNorthSouthLeft(subject, 'red');
+  expectEastWestRight(subject, 'red');
+
+  subject.updateTicks(28);
+  expectNorthSouthRight(subject, 'yellow');
+  expectNorthSouthLeft(subject, 'red');
+  expectEastWestRight(subject, 'red');
+  expectEastWestLeft(subject, 'red');
+
+  // 28-30  yellow
+  subject.updateTicks(1);
+  expectNorthSouthRight(subject, 'yellow');
+  expectNorthSouthLeft(subject, 'red');
+  expectEastWestRight(subject, 'red');
+  expectEastWestLeft(subject, 'red');
+
+  // 31-38 is left green
+  subject.updateTicks(1);
+  expectNorthSouthRight(subject, 'red');
+  expectNorthSouthLeft(subject, 'green');
+  expectEastWestRight(subject, 'red');
+  expectEastWestLeft(subject, 'red');
+
+  // 38-40 is left yellow
+  subject.updateTicks(7);
+  expectNorthSouthRight(subject, 'red');
+  expectNorthSouthLeft(subject, 'yellow');
+  expectEastWestRight(subject, 'red');
+  expectEastWestLeft(subject, 'red');
+
+  // 41-70
+  subject.updateTicks(2);
+  expectNorthSouthRight(subject, 'red');
+  expectNorthSouthLeft(subject, 'red');
+  expectEastWestRight(subject, 'green');
+  expectEastWestLeft(subject, 'red');
+
+  subject.updateTicks(28);
+  expectNorthSouthRight(subject, 'red');
+  expectNorthSouthLeft(subject, 'red');
+  expectEastWestRight(subject, 'yellow');
+  expectEastWestLeft(subject, 'red');
+
+  // 71-78 e/w left green
+  subject.updateTicks(3);
+  expectNorthSouthRight(subject, 'red');
+  expectNorthSouthLeft(subject, 'red');
+  expectEastWestRight(subject, 'red');
+  expectEastWestLeft(subject, 'green');
+
+  // 78-80 e/w left yellow
+  subject.updateTicks(7);
+  expectNorthSouthRight(subject, 'red');
+  expectNorthSouthLeft(subject, 'red');
+  expectEastWestRight(subject, 'red');
+  expectEastWestLeft(subject, 'yellow');
+
+  // 80 restarts cycle
+  subject.updateTicks(2);
+  expectNorthSouthRight(subject, 'green');
+  expectNorthSouthLeft(subject, 'red');
+  expectEastWestRight(subject, 'red');
+  expectEastWestLeft(subject, 'red');
+});
+
+test("intersection N/S left turn lanes turn on from ticks 31-40", () => {
   const subject = new IntersectionModel();
   // 0 - 28 green
   // 29-30  yellow
-  subject.updateTicks(1);
-  expectNorthSouthRight(subject, 'green');
+  // 31-38 is left green
+  // 38-40 is left yellow
 
-  subject.updateTicks(28);
-  expectNorthSouthRight(subject, 'yellow');
-
-  subject.updateTicks(1);
-  expectNorthSouthRight(subject, 'yellow');
+  subject.updateTicks(30);
+  expectNorthSouthLeft(subject, 'red');
 
   subject.updateTicks(1);
-  expectEastWestRight(subject, 'green');
+  expectNorthSouthLeft(subject, 'green');
 
-  subject.updateTicks(28);
-  expectEastWestRight(subject, 'yellow');
-
-  subject.updateTicks(1);
-  expectEastWestRight(subject, 'yellow');
+  subject.updateTicks(7);
+  expectNorthSouthLeft(subject, 'yellow');
 
   subject.updateTicks(1);
-  expectEastWestRight(subject, 'yellow');
-
-  subject.updateTicks(1);
-  expectNorthSouthRight(subject, "green");
-});
+  expectNorthSouthLeft(subject, 'red');
+})
 
 test("intersection allows cars through from north to south", () => {
   const subject = new IntersectionModel();
@@ -148,6 +211,11 @@ test("intersection allows cars turn right from north to west", () => {
   expect(subject.westRoad.incomingLane.cars).toEqual(0);
 });
 
+function expectEastWestRight(subject: IntersectionModel, expectedLight: TrafficLightState) {
+  expect(subject.westRoad.rightTrafficLight).toEqual(expectedLight);
+  expect(subject.eastRoad.rightTrafficLight).toEqual(expectedLight);
+}
+
 function expectNorthSouth(subject: IntersectionModel, expectedLight: TrafficLightState) {
   expect(subject.northRoad.middleTrafficLight).toEqual(expectedLight);
   expect(subject.southRoad.middleTrafficLight).toEqual(expectedLight);
@@ -158,8 +226,11 @@ function expectNorthSouth(subject: IntersectionModel, expectedLight: TrafficLigh
 function expectNorthSouthRight(subject: IntersectionModel, expectedLight: TrafficLightState) {
   expect(subject.northRoad.rightTrafficLight).toEqual(expectedLight);
   expect(subject.southRoad.rightTrafficLight).toEqual(expectedLight);
-  expect(subject.westRoad.rightTrafficLight).toEqual('red');
-  expect(subject.eastRoad.rightTrafficLight).toEqual('red');
+}
+
+function expectNorthSouthLeft(subject: IntersectionModel, expectedLight: TrafficLightState) {
+  expect(subject.northRoad.leftTrafficLight).toEqual(expectedLight);
+  expect(subject.southRoad.leftTrafficLight).toEqual(expectedLight);
 }
 
 function expectEastWestGreen(subject: IntersectionModel, expectedLight: TrafficLightState) {
@@ -169,9 +240,7 @@ function expectEastWestGreen(subject: IntersectionModel, expectedLight: TrafficL
   expect(subject.eastRoad.middleTrafficLight).toEqual(expectedLight);
 }
 
-function expectEastWestRight(subject: IntersectionModel, expectedLight: TrafficLightState) {
-  expect(subject.northRoad.rightTrafficLight).toEqual('red');
-  expect(subject.southRoad.rightTrafficLight).toEqual('red');
-  expect(subject.westRoad.rightTrafficLight).toEqual(expectedLight);
-  expect(subject.eastRoad.rightTrafficLight).toEqual(expectedLight);
+function expectEastWestLeft(subject: IntersectionModel, expectedLight: TrafficLightState) {
+  expect(subject.westRoad.leftTrafficLight).toEqual(expectedLight);
+  expect(subject.eastRoad.leftTrafficLight).toEqual(expectedLight);
 }
